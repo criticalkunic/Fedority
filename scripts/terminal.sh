@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+USER_HOME="${HOME}"
+FONT_DIR="${USER_HOME}/.local/share/fonts"
+KONSOLE_DIR="${USER_HOME}/.local/share/konsole"
+COLOR_SCHEME_NAME="Catppuccin-Mocha"
+WALLPAPER_DIR="${USER_HOME}/Pictures/Wallpapers"
+
+echo "🖥 Installing Starship + terminal theming"
+
+# --------------------------------------------------
+# 1. Install Starship via COPR
+# --------------------------------------------------
+echo "⭐ Installing Starship"
+
+sudo dnf -y copr enable atim/starship
+sudo dnf -y install starship
+
+# --------------------------------------------------
+# 2. Install Noto Nerd Font
+# --------------------------------------------------
+echo "🔤 Installing Noto Nerd Font"
+
+mkdir -p "${FONT_DIR}"
+cd /tmp
+
+if [[ ! -f Noto.zip ]]; then
+  curl -L -o Noto.zip \
+    https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Noto.zip
+fi
+
+unzip -o Noto.zip -d "${FONT_DIR}"
+fc-cache -fv
+
+# --------------------------------------------------
+# 3. Set Konsole default font
+# --------------------------------------------------
+echo "🧾 Setting Konsole font"
+
+kwriteconfig5 \
+  --file konsolerc \
+  --group "Desktop Entry" \
+  --key DefaultProfile "Default.profile"
+
+kwriteconfig5 \
+  --file "${KONSOLE_DIR}/Default.profile" \
+  --group Appearance \
+  --key Font "Noto Nerd Font,10,-1,5,50,0,0,0,0,0"
+
+# --------------------------------------------------
+# 4. Enable Starship in bash
+# --------------------------------------------------
+echo "🐚 Enabling Starship in bash"
+
+if ! grep -q 'starship init bash' "${USER_HOME}/.bashrc"; then
+  echo '' >> "${USER_HOME}/.bashrc"
+  echo '# Starship prompt' >> "${USER_HOME}/.bashrc"
+  echo 'eval "$(starship init bash)"' >> "${USER_HOME}/.bashrc"
+fi
+
+# --------------------------------------------------
+# 5. Install Scratchy color scheme for Konsole
+# --------------------------------------------------
+echo "🎨 Installing Scratchy Konsole color scheme"
+
+KONSOLE_DIR="${HOME}/.local/share/konsole"
+mkdir -p "${KONSOLE_DIR}"
+
+curl -L -o "${KONSOLE_DIR}/Scratchy.colorscheme" \
+  https://gitlab.com/jomada/Scratchy/-/raw/main/color-schemes/Scratchy.colors
+
+echo "✅ Scratchy Konsole color scheme installed"
+
+# --------------------------------------------------
+# 6. Set default Konsole color scheme
+# --------------------------------------------------
+echo "🎯 Setting Konsole default color scheme"
+
+kwriteconfig5 \
+  --file "${KONSOLE_DIR}/Default.profile" \
+  --group Appearance \
+  --key ColorScheme "${COLOR_SCHEME_NAME}"
+
+# --------------------------------------------------
+# 7. Set wallpaper
+# --------------------------------------------------
+echo "🖼 Setting wallpaper"
+
+mkdir -p "${WALLPAPER_DIR}"
+
+WALLPAPER_PATH="${WALLPAPER_DIR}/catppuccin-rainbow.png"
+
+curl -L -o "${WALLPAPER_PATH}" \
+  https://github.com/zhichaoh/catppuccin-wallpapers/raw/main/misc/rainbow.png
+
+qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+var allDesktops = desktops();
+for (i=0; i<allDesktops.length; i++) {
+  d = allDesktops[i];
+  d.wallpaperPlugin = 'org.kde.image';
+  d.currentConfigGroup = ['Wallpaper', 'org.kde.image', 'General'];
+  d.writeConfig('Image', 'file://${WALLPAPER_PATH}');
+}
+"
+
+echo "✅ Terminal theming complete (restart Konsole for full effect)"

@@ -1,0 +1,16 @@
+[Global]
+LookAndFeelSet=Moe-Dark
+
+[Windeco]
+ButtonIconStyle=StyleSystemIconTheme
+WindowCornerRadius=0
+
+[WindowOutlineStyle]
+LockThinWindowOutlineCustomColorActiveInactive=false
+ThinWindowOutlineCustomColorActive=243,139,168
+ThinWindowOutlineCustomColorInactive=127,132,156
+ThinWindowOutlineStyleActive=WindowOutlineCustomColor
+ThinWindowOutlineStyleInactive=WindowOutlineCustomColor
+ThinWindowOutlineThickness=3
+WindowOutlineAccentColorOpacityActive=100
+WindowOutlineCustomColorOpacityInactive=100
