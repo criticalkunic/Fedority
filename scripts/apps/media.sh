@@ -70,15 +70,6 @@ echo "🎮 Installing gaming multimedia support"
 sudo dnf install -y \
   steam-devices \
   pipewire-jack-audio-connection-kit \
-  mangohud \
-  gamemode
-
-# --------------------------------------------------
-# Enable GameMode (safe on non-gaming systems)
-# --------------------------------------------------
-echo "⚙️ Enabling GameMode"
-
-sudo systemctl enable --now gamemoded.service || true
 
 # --------------------------------------------------
 # Cleanup

@@ -41,24 +41,37 @@ echo "ℹ️ Theme is installed but not yet applied"
 # ==================================================
 # Krohnkite (KWin Script)
 # ==================================================
-echo "🪟 Installing Krohnkite (KWin tiling script)"
+echo "📥 Fetching latest Krohnkite .kwinscript release…"
 
-TMP_DIR="$(mktemp -d)"
-KWINRC="$HOME/.config/kwinrc"
+# Get latest Krohnkite release info from GitHub
+LATEST_INFO="$(curl -s https://api.github.com/repos/esjeon/krohnkite/releases/latest)"
 
-git clone https://github.com/anametologin/krohnkite "$TMP_DIR/krohnkite"
+# Extract URL to .kwinscript asset
+KWINSCRIPT_URL="$(echo "$LATEST_INFO" \
+  | grep -E "browser_download_url.*\\.kwinscript" \
+  | head -n1 \
+  | cut -d '"' -f4)"
 
-pushd "$TMP_DIR/krohnkite" >/dev/null
-make install
-popd >/dev/null
+if [[ -z "$KWINSCRIPT_URL" ]]; then
+  echo "❌ Could not find latest Krohnkite .kwinscript URL"
+  exit 1
+fi
 
-rm -rf "$TMP_DIR"
+# Temp file to save .kwinscript
+TEMP_KSCRIPT="$(mktemp --suffix=.kwinscript)"
 
-# Enable Krohnkite
-kwriteconfig6 \
-  --file "$KWINRC" \
-  --group Plugins \
-  --key krohnkiteEnabled true
+echo "➡ Downloading Krohnkite release from: $KWINSCRIPT_URL"
+curl -L "$KWINSCRIPT_URL" -o "$TEMP_KSCRIPT"
+
+# Install with kpackagetool6
+echo "📦 Installing Krohnkite script…"
+kpackagetool6 -t KWin/Script -i "$TEMP_KSCRIPT"
+
+# Cleanup
+rm -f "$TEMP_KSCRIPT"
+echo "🧹 Cleaned up temporary files"
+
+echo "✅ Krohnkite installation attempted — enable via System Settings (or config)"
 
 # ==================================================
 # Klassy (Plasma 6 window decoration)
