@@ -1,38 +1,58 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "📦 Installing RPM Fusion + media codecs"
+echo "📦 Fedora RPM Fusion + Multimedia bootstrap"
 
 FEDORA_VERSION="$(rpm -E %fedora)"
 
 # --------------------------------------------------
-# Enable RPM Fusion
+# Enable RPM Fusion (free + nonfree)
 # --------------------------------------------------
-echo "🔓 Enabling RPM Fusion"
+echo "🔓 Enabling RPM Fusion repositories"
 
 sudo dnf install -y \
   https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-${FEDORA_VERSION}.noarch.rpm \
   https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${FEDORA_VERSION}.noarch.rpm
 
-sudo dnf -y upgrade --refresh
+# --------------------------------------------------
+# Refresh system
+# --------------------------------------------------
+echo "🔄 Refreshing package metadata"
+
+sudo dnf upgrade --refresh -y
 
 # --------------------------------------------------
-# Multimedia codecs (Fedora recommended set)
+# Replace Fedora ffmpeg-free with RPM Fusion ffmpeg
 # --------------------------------------------------
-echo "🎬 Installing multimedia codecs"
+echo "🎬 Swapping ffmpeg-free → ffmpeg (RPM Fusion)"
+
+sudo dnf swap -y \
+  ffmpeg-free \
+  ffmpeg \
+  --allowerasing || true
+
+# --------------------------------------------------
+# Install full multimedia stack (RPM Fusion approved)
+# --------------------------------------------------
+echo "🎥 Installing multimedia group (full codec support)"
+
+sudo dnf group upgrade -y \
+  --with-optional Multimedia
+
+# --------------------------------------------------
+# GStreamer plugins (explicit safety net)
+# --------------------------------------------------
+echo "🎞 Installing GStreamer plugins"
 
 sudo dnf install -y \
-  ffmpeg \
-  ffmpeg-libs \
   gstreamer1-libav \
   gstreamer1-plugins-base \
   gstreamer1-plugins-good \
   gstreamer1-plugins-bad-free \
-  gstreamer1-plugins-ugly \
-  gstreamer1-plugins-ugly-free
+  gstreamer1-plugins-ugly
 
 # --------------------------------------------------
-# Hardware video acceleration (safe defaults)
+# Hardware video acceleration
 # --------------------------------------------------
 echo "🧠 Installing VA-API / Vulkan helpers"
 
@@ -46,7 +66,7 @@ sudo dnf install -y \
 # --------------------------------------------------
 # Gaming-related multimedia bits
 # --------------------------------------------------
-echo "🎮 Gaming multimedia support"
+echo "🎮 Installing gaming multimedia support"
 
 sudo dnf install -y \
   steam-devices \
@@ -55,8 +75,10 @@ sudo dnf install -y \
   gamemode
 
 # --------------------------------------------------
-# Enable GameMode
+# Enable GameMode (safe on non-gaming systems)
 # --------------------------------------------------
+echo "⚙️ Enabling GameMode"
+
 sudo systemctl enable --now gamemoded.service || true
 
 # --------------------------------------------------
@@ -67,4 +89,4 @@ echo "🧹 Cleaning up"
 sudo dnf autoremove -y
 sudo dnf clean all
 
-echo "✅ Media & RPM Fusion setup complete"
+echo "✅ RPM Fusion & multimedia setup complete"
