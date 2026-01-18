@@ -1,11 +1,18 @@
 {
-  "KPlugin": {
-    "Id": "fedority",
-    "Name": "Fedority",
-    "Description": "Look and Feel generated from current KDE desktop",
-    "Version": "1.0",
-    "Authors": [{ "Name": "User" }]
-  },
-  "X-KDE-PluginInfo-License": "GPL",
-  "X-KDE-PluginInfo-EnabledByDefault": true
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Critical Kunic"
+            }
+        ],
+        "Category": "Global Themes (Plasma 6)",
+        "Dependencies": [
+        ],
+        "EnabledByDefault": true,
+        "Id": "Fedority",
+        "License": "MIT",
+        "Name": "Fedority",
+        "Version": "0.1"
+    }
 }

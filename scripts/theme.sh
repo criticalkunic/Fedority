@@ -74,8 +74,14 @@ FILENAME="$(basename "$KWINSCRIPT_URL")"
 echo "⬇️  Downloading $FILENAME"
 curl -fL "$KWINSCRIPT_URL" -o "$TMP_DIR/$FILENAME"
 
-echo "📦 Installing KWin script..."
-kpackagetool6 --type=KWin/Script -i "$TMP_DIR/$FILENAME"
+SCRIPT_DIR="$HOME/.local/share/kwin/scripts/krohnkite"
+
+if [[ -d "$SCRIPT_DIR" ]]; then
+  echo "✔ Krohnkite already installed at $SCRIPT_DIR. Skipping."
+else
+  echo "📦 Installing KWin script..."
+  kpackagetool6 --type=KWin/Script -i "$TMP_DIR/$FILENAME"
+fi
 
 echo "⚙️  Enabling Krohnkite..."
 kwriteconfig6 \

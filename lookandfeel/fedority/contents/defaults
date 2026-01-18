@@ -1,0 +1,17 @@
+[kdeglobals][General]
+ColorScheme=CatppuccinFrappeRed
+
+[kcminputrc][Mouse]
+cursorTheme=macOS
+
+[kwinrc][org.kde.kdecoration2]
+ButtonsOnLeft=
+ButtonsOnRight=
+library=org.kde.kwin.aurorae
+theme=klassy
+
+[plasmarc][Theme]
+name=default
+
+[KSplash]
+Theme=Catppuccin-Frappe-Red-splash

@@ -51,7 +51,7 @@ bash "${SCRIPTS_DIR}/theme.sh"
 
 echo "Applying Look and Feel"
 mkdir -p ~/.local/share/plasma/look-and-feel
-cp -r ./fedority \
+cp -r ./lookandfeel/fedority \
   ~/.local/share/plasma/look-and-feel/
 lookandfeeltool --apply fedority
 
