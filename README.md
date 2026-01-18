@@ -32,4 +32,4 @@ git clone https://github.com/criticalkunic/fedority.git \
   && ./bootstrap.sh \
   && cd .. \
   && rm -rf fedority
-  && qdbus6 org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
+  && qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
