@@ -17,8 +17,10 @@ LayoutName=org.kde.breeze.desktop
 LayoutName=org.kde.breeze.desktop
 
 [kwinrc][org.kde.kdecoration2]
+ButtonsOnLeft=
+ButtonsOnRight=
 library=org.kde.klassy
 theme=Klassy
 
 [plasmarc][Theme]
-name=ROUNDED-COLOR
+name=Klassy
