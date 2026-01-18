@@ -43,11 +43,11 @@ bash "${SCRIPTS_DIR}/apps/media.sh"
 echo "🖥 2/4 Configuring terminal (fonts, starship, konsole)"
 bash "${SCRIPTS_DIR}/terminal.sh"
 
-echo "🎨 3/4 Installing and applying themes"
-bash "${SCRIPTS_DIR}/theme.sh"
-
-echo "🪟 4/4 Applying KDE configuration (KWin, Klassy, Krohnkite)"
+echo "🪟 3/4 Applying KDE configuration (KWin, Klassy, Krohnkite)"
 bash "${SCRIPTS_DIR}/kde.sh"
+
+echo "🎨 4/4 Installing and applying themes"
+bash "${SCRIPTS_DIR}/theme.sh"
 
 # --------------------------------------------------
 # Done
@@ -55,6 +55,4 @@ bash "${SCRIPTS_DIR}/kde.sh"
 echo
 echo "✅ Bootstrap complete"
 echo "ℹ️ Recommended next steps:"
-echo "   • Log out and log back in"
-echo "   • Enable Krohnkite if not already active"
-echo "   • Verify Klassy + Catppuccin are selected"
+echo "   • Please log out and log back in"

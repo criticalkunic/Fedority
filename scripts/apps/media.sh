@@ -36,8 +36,7 @@ sudo dnf swap -y \
 # --------------------------------------------------
 echo "🎥 Installing multimedia group (full codec support)"
 
-sudo dnf group upgrade -y \
-  --with-optional Multimedia
+sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
 
 # --------------------------------------------------
 # GStreamer plugins (explicit safety net)

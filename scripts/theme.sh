@@ -41,9 +41,24 @@ echo "ℹ️ Theme is installed but not yet applied"
 # ==================================================
 # Krohnkite (KWin Script)
 # ==================================================
-echo "🪟 Installing Krohnkite (KWin script)"
+echo "🪟 Installing Krohnkite (KWin tiling script)"
 
-kpackagetool6 -t KWin/Script -s krohnkite || true
+TMP_DIR="$(mktemp -d)"
+KWINRC="$HOME/.config/kwinrc"
+
+git clone https://github.com/anametologin/krohnkite "$TMP_DIR/krohnkite"
+
+pushd "$TMP_DIR/krohnkite" >/dev/null
+make install
+popd >/dev/null
+
+rm -rf "$TMP_DIR"
+
+# Enable Krohnkite
+kwriteconfig6 \
+  --file "$KWINRC" \
+  --group Plugins \
+  --key krohnkiteEnabled true
 
 # ==================================================
 # Klassy (Plasma 6 window decoration)

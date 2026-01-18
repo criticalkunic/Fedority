@@ -94,6 +94,8 @@ WALLPAPER_PATH="${WALLPAPER_DIR}/catppuccin-rainbow.png"
 curl -L -o "${WALLPAPER_PATH}" \
   https://github.com/zhichaoh/catppuccin-wallpapers/raw/main/misc/rainbow.png
 
+sudo dnf install qdbus
+
 qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
 var allDesktops = desktops();
 for (i=0; i<allDesktops.length; i++) {
