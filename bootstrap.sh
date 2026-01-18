@@ -58,6 +58,18 @@ kwriteconfig6 \
   --group org.kde.krunner.desktop \
   --key _launch none
 
+  kwriteconfig6 \
+  --file kglobalshortcutsrc \
+  --group kwin \
+  --key "Window Close" \
+  "Meta+W\tAlt+F4,Alt+F4,Close Window"
+
+  kwriteconfig6 \
+  --file kglobalshortcutsrc \
+  --group kwin \
+  --key Overview \
+  "Meta\tMeta,Toggle Overview"
+
 # --------------------------------------------------
 # Done
 # --------------------------------------------------
