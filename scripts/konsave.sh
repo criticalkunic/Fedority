@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PROFILE_NAME="Fedority"
-KNSV_PATH="../files/Fedority.knsv"
+KNSV_PATH="$(dirname "$0")/../files/Fedority.knsv"
 
 echo "🧩 Installing konsave (user-local)"
 pip install setuptools
