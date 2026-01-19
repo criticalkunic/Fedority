@@ -2,20 +2,6 @@
 set -euo pipefail
 
 # ==================================================
-# Apply Plasma Look-and-Feel
-# ==================================================
-
-echo "🎨 Applying Look and Feel"
-
-LOOKANDFEEL_DIR="$HOME/.local/share/plasma/look-and-feel"
-
-mkdir -p "$LOOKANDFEEL_DIR"
-cp -r ./lookandfeel/Fedority "$LOOKANDFEEL_DIR/"
-
-lookandfeeltool --apply Fedority
-
-
-# ==================================================
 # KWin Window Decorations
 # ==================================================
 
@@ -32,7 +18,6 @@ kwriteconfig6 \
   --file "$KWINRC" \
   --group org.kde.kdecoration2 \
   --key ButtonsOnRight ""
-
 
 # ==================================================
 # Konsole Scratchy Colorscheme + Profile

@@ -37,20 +37,24 @@ fi
 # Order matters
 # --------------------------------------------------
 
-echo "📦 1/5 Installing Applications"
+echo "📦 1/6 Installing Applications"
 bash "${SCRIPTS_DIR}/apps.sh"
 
-echo "🖥 2/5 Configuring terminal (fonts, starship, konsole)"
+echo "🖥 2/6 Configuring terminal (fonts, starship, konsole)"
 bash "${SCRIPTS_DIR}/terminal.sh"
 
-echo "🪟 3/5 Applying KDE configuration (KWin, Klassy, Krohnkite)"
+echo "🪟 3/6 Applying KDE configuration (KWin, Klassy, Krohnkite)"
+bash "${SCRIPTS_DIR}/konsave.sh"
 bash "${SCRIPTS_DIR}/kde.sh"
 
-echo "🎨 4/5 Installing themes"
+echo "🎨 4/6 Installing themes"
 bash "${SCRIPTS_DIR}/theme.sh"
 
-echo "🎨 5/5 Configuring Look and Feel"
+echo "🎨 5/6 Configuring Look and Feel"
 bash "${SCRIPTS_DIR}/lookandfeel.sh"
+
+echo "🎨 6/6 Grabbing SDDM Theme and Applying"
+bash "${SCRIPTS_DIR}/sddm.sh"
 
 kwriteconfig6 \
   --file kglobalshortcutsrc \
@@ -58,17 +62,10 @@ kwriteconfig6 \
   --group org.kde.krunner.desktop \
   --key _launch none
 
-  kwriteconfig6 \
+kwriteconfig6 \
   --file kglobalshortcutsrc \
   --group kwin \
-  --key "Window Close" \
-  "Meta+W\tAlt+F4,Alt+F4,Close Window"
-
-  kwriteconfig6 \
-  --file kglobalshortcutsrc \
-  --group kwin \
-  --key Overview \
-  "Meta\tMeta,Toggle Overview"
+  --key Overview none
 
 # --------------------------------------------------
 # Done
