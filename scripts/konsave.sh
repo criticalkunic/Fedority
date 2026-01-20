@@ -90,37 +90,6 @@ echo "🖱️  Setting cursor theme: macOS"
 plasma-apply-cursortheme macOS
 
 # --------------------------------------------------
-# Restore KDE Settings
-# --------------------------------------------------
-BACKUP_FILE="$(cd "${SCRIPT_DIR}/../files/plasma-org.kde.plasma.desktop-appletsrc"
-TARGET_FILE="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
-
-# --------------------------------------------------
-# Sanity checks
-# --------------------------------------------------
-if [[ ! -f "$BACKUP_FILE" ]]; then
-  echo "❌ Backup file not found:"
-  echo "   $BACKUP_FILE"
-  exit 1
-fi
-
-mkdir -p "$HOME/.config"
-
-# --------------------------------------------------
-# Backup current config (just in case)
-# --------------------------------------------------
-if [[ -f "$TARGET_FILE" ]]; then
-  echo "📦 Backing up existing Plasma applets config"
-  cp "$TARGET_FILE" "${TARGET_FILE}.bak.$(date +%Y%m%d-%H%M%S)"
-fi
-
-# --------------------------------------------------
-# Restore backup
-# --------------------------------------------------
-echo "♻️  Restoring Plasma widget configuration"
-cp "$BACKUP_FILE" "$TARGET_FILE"
-
-# --------------------------------------------------
 # Set wallpaper
 # --------------------------------------------------
 echo "🖼 Setting wallpaper"
@@ -144,6 +113,7 @@ for (i=0; i<allDesktops.length; i++) {
   d.wallpaperPlugin = 'org.kde.image';
   d.currentConfigGroup = ['Wallpaper', 'org.kde.image', 'General'];
   d.writeConfig('Image', 'file://${WALLPAPER_PATH}');
-}"
+}
+"
 
 echo "✅ KDE appearance successfully applied"
