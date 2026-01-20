@@ -13,16 +13,15 @@ ShowCloseOutlineOnHoverActive=false
 ShowCloseOutlineOnHoverInactive=false
 ShowCloseOutlineOnPressActive=false
 ShowCloseOutlineOnPressInactive=false
-ShowIconNormallyActive=false
-ShowIconNormallyInactive=false
-ShowIconOnHoverActive=false
-ShowIconOnHoverInactive=false
-ShowIconOnPressActive=false
-ShowIconOnPressInactive=false
 ShowOutlineOnHoverActive=false
 ShowOutlineOnHoverInactive=false
 ShowOutlineOnPressActive=false
 ShowOutlineOnPressInactive=false
+
+[ButtonColors]
+ButtonBackgroundColorsActive=Accent
+ButtonIconColorsActive=Accent
+CloseButtonIconColorActive=AsSelected
 
 [Global]
 LookAndFeelSet=Fedority
@@ -33,7 +32,8 @@ FrameCustomCornerRadius=0
 SplitterProxyEnabled=true
 
 [Windeco]
-ButtonIconStyle=StyleSystemIconTheme
+ButtonIconStyle=StyleFluent
+IconSize=IconSmallMedium
 WindowCornerRadius=0
 
 [WindowOutlineStyle]

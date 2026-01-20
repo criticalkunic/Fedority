@@ -89,4 +89,58 @@ plasma-apply-colorscheme CatppuccinMochaRed
 echo "🖱️  Setting cursor theme: macOS"
 plasma-apply-cursortheme macOS
 
+# --------------------------------------------------
+# Restore KDE Settings
+# --------------------------------------------------
+BACKUP_FILE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../files/plasma-org.kde.plasma.desktop-appletsrc"
+TARGET_FILE="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
+
+# --------------------------------------------------
+# Sanity checks
+# --------------------------------------------------
+if [[ ! -f "$BACKUP_FILE" ]]; then
+  echo "❌ Backup file not found:"
+  echo "   $BACKUP_FILE"
+  exit 1
+fi
+
+mkdir -p "$HOME/.config"
+
+# --------------------------------------------------
+# Backup current config (just in case)
+# --------------------------------------------------
+if [[ -f "$TARGET_FILE" ]]; then
+  echo "📦 Backing up existing Plasma applets config"
+  cp "$TARGET_FILE" "${TARGET_FILE}.bak.$(date +%Y%m%d-%H%M%S)"
+fi
+
+# --------------------------------------------------
+# Restore backup
+# --------------------------------------------------
+echo "♻️  Restoring Plasma widget configuration"
+cp "$BACKUP_FILE" "$TARGET_FILE"
+
+# --------------------------------------------------
+# Set wallpaper
+# --------------------------------------------------
+echo "🖼 Setting wallpaper"
+
+mkdir -p "${WALLPAPER_DIR}"
+
+WALLPAPER_PATH="${WALLPAPER_DIR}/catppuccin-rainbow.png"
+
+curl -L -o "${WALLPAPER_PATH}" \
+  https://github.com/zhichaoh/catppuccin-wallpapers/raw/main/misc/rainbow.png
+
+sudo dnf install qdbus
+
+qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+var allDesktops = desktops();
+for (i=0; i<allDesktops.length; i++) {
+  d = allDesktops[i];
+  d.wallpaperPlugin = 'org.kde.image';
+  d.currentConfigGroup = ['Wallpaper', 'org.kde.image', 'General'];
+  d.writeConfig('Image', 'file://${WALLPAPER_PATH}');
+}"
+
 echo "✅ KDE appearance successfully applied"

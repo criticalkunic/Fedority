@@ -111,28 +111,4 @@ fi
 # Reload Konsole config
 qdbus org.kde.konsole /konsole/MainWindow_1 org.kde.konsole.reloadSettings 2>/dev/null || true
 
-# --------------------------------------------------
-# 7. Set wallpaper
-# --------------------------------------------------
-echo "🖼 Setting wallpaper"
-
-mkdir -p "${WALLPAPER_DIR}"
-
-WALLPAPER_PATH="${WALLPAPER_DIR}/catppuccin-rainbow.png"
-
-curl -L -o "${WALLPAPER_PATH}" \
-  https://github.com/zhichaoh/catppuccin-wallpapers/raw/main/misc/rainbow.png
-
-sudo dnf install qdbus
-
-qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
-var allDesktops = desktops();
-for (i=0; i<allDesktops.length; i++) {
-  d = allDesktops[i];
-  d.wallpaperPlugin = 'org.kde.image';
-  d.currentConfigGroup = ['Wallpaper', 'org.kde.image', 'General'];
-  d.writeConfig('Image', 'file://${WALLPAPER_PATH}');
-}
-"
-
 echo "✅ Terminal theming complete (restart Konsole for full effect)"
