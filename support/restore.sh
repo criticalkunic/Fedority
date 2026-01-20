@@ -55,17 +55,12 @@ tar -C "$HOME" -xzf "$ARCHIVE_PATH" \
 echo "📐 Restoring Plasma layout..."
 tar -C "$HOME" -xzf "$ARCHIVE_PATH" \
   .config/plasma-org.kde.plasma.desktop-appletsrc \
-  .config/plasmarc \
   .config/kdeglobals \
   .config/kwinrc \
   .config/kglobalshortcutsrc \
   .config/kscreenlockerrc \
-  .config/ksmserverrc \
-  .config/krunnerrc \
   .config/dolphinrc \
-  .config/konsolerc \
-  .config/systemsettingsrc \
-  .config/autostart
+  .config/konsolerc
 
 # --------------------------------------------------
 # Clear Plasma caches (prevents geometry recalculation)
