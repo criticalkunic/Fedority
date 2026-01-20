@@ -8,9 +8,17 @@ ARCHIVE_PATH="$HOME/kde_config_backup.tar.gz"
 
 # --------------------------------------------------
 # Paths relative to $HOME
+# Order matters on restore
 # --------------------------------------------------
 CONFIG_PATHS=(
+  # Screen topology (CRITICAL)
+  ".local/share/kscreen"
+
+  # Plasma layout
   ".config/plasma-org.kde.plasma.desktop-appletsrc"
+  ".config/plasmarc"
+
+  # Core KDE behavior
   ".config/kdeglobals"
   ".config/kwinrc"
   ".config/kglobalshortcutsrc"
@@ -40,7 +48,7 @@ for path in "${CONFIG_PATHS[@]}"; do
 done
 
 # --------------------------------------------------
-# Create archive with clean paths
+# Create archive
 # --------------------------------------------------
 echo "🗜 Creating KDE config backup:"
 echo "   $ARCHIVE_PATH"

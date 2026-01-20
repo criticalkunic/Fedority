@@ -5,7 +5,7 @@ set -euo pipefail
 # Fedora KDE Bootstrap
 # ==================================================
 
-echo "🚀 Sytarting Fedora KDE bootstrap"
+echo "🚀 Starting Fedora KDE bootstrap"
 
 # --------------------------------------------------
 # Resolve paths
@@ -14,45 +14,53 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_DIR="${ROOT_DIR}/scripts"
 
 # --------------------------------------------------
-# Ensure script permissions (readable, not executable)
+# Install desktop applications
 # --------------------------------------------------
-echo "🔧 Normalizing script permissions"
-
-chmod -R u+rX "${SCRIPTS_DIR}"
+"${SCRIPTS_DIR}/install/install-desktop-apps.sh"
 
 # --------------------------------------------------
-# Sanity checks
+# Install KDE themes (Catppuccin, Klassy, icons, etc.)
 # --------------------------------------------------
-if [[ "$XDG_CURRENT_DESKTOP" != *"KDE"* ]]; then
-  echo "❌ This bootstrap is intended for KDE Plasma only"
-  exit 1
-fi
-
-if ! command -v kwriteconfig5 >/dev/null; then
-  echo "❌ kwriteconfig5 not found. Are KDE tools installed?"
-  exit 1
-fi
+"${SCRIPTS_DIR}/install/install-kde-themes.sh"
 
 # --------------------------------------------------
-# Order matters
+# Install Plasma widgets / applets
 # --------------------------------------------------
+"${SCRIPTS_DIR}/install/install-plasma-widgets.sh"
 
-bash "${SCRIPTS_DIR}/apps.sh"
+# --------------------------------------------------
+# Install and configure SDDM theme
+# --------------------------------------------------
+"${SCRIPTS_DIR}/install/install-sddm-theme.sh"
 
-bash "${SCRIPTS_DIR}/applets.sh"
+# --------------------------------------------------
+# Configure terminal (fonts, Starship, Konsole)
+# --------------------------------------------------
+"${SCRIPTS_DIR}/configure/configure-terminal.sh"
 
-bash "${SCRIPTS_DIR}/terminal.sh"
+# --------------------------------------------------
+# Apply KDE appearance (colors, cursors, icons, effects)
+# --------------------------------------------------
+"${SCRIPTS_DIR}/configure/apply-kde-appearance.sh"
 
-bash "${SCRIPTS_DIR}/kde.sh"
+# --------------------------------------------------
+# Configure window decorations + Konsole profile
+# --------------------------------------------------
+"${SCRIPTS_DIR}/configure/configure-window-and-terminal.sh"
 
-bash "${SCRIPTS_DIR}/theme.sh"
+# --------------------------------------------------
+# Restore initial Plasma layout
+# --------------------------------------------------
+"${SCRIPTS_DIR}/restore/restore-plasma-layout-initial.sh"
 
-bash "${SCRIPTS_DIR}/lookandfeel.sh"
+# --------------------------------------------------
+# Apply the Look and Feel theming now that all required packages and files are available
+# --------------------------------------------------
+"${SCRIPTS_DIR}/restore/restore-plasma-layout-final.sh"
 
-bash "${SCRIPTS_DIR}/sddm.sh"
-
-bash "${SCRIPTS_DIR}/konsave.sh"
-
+# --------------------------------------------------
+# Disable unwanted default shortcuts
+# --------------------------------------------------
 kwriteconfig6 \
   --file kglobalshortcutsrc \
   --group services \
