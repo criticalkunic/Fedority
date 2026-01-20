@@ -42,8 +42,8 @@ if [[ ! -f "$KNSV_PATH" ]]; then
   exit 1
 fi
 
-echo "📦 Extracting KNSV archive"
-tar -xf "$KNSV_PATH" -C "$TMP_DIR"
+echo "📦 Extracting KNSV (ZIP archive)"
+unzip -q "$KNSV_PATH" -d "$TMP_DIR"
 
 EXPORT_PATH="$TMP_DIR/$EXPORT_SUBDIR"
 mkdir -p "$EXPORT_PATH"
@@ -64,8 +64,11 @@ for folder in "${FOLDERS[@]}"; do
   fi
 done
 
-echo "📦 Repacking KNSV archive"
-tar -czf "$KNSV_PATH" -C "$TMP_DIR" .
+echo "📦 Repacking KNSV (ZIP format)"
+(
+  cd "$TMP_DIR"
+  zip -qr "$KNSV_PATH" .
+)
 
 echo "📥 Importing KDE layout: $PROFILE_NAME"
 konsave -i "$KNSV_PATH"
