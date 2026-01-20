@@ -13,6 +13,9 @@ echo "🚀 Starting Fedora KDE bootstrap"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_DIR="${ROOT_DIR}/scripts"
 
+# Ensure all scripts are executable
+find "$SCRIPTS_DIR" -type f -name "*.sh" -exec chmod +x {} \;
+
 # --------------------------------------------------
 # Install desktop applications
 # --------------------------------------------------
