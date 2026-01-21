@@ -1,82 +1,37 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+THEME_NAME="Fedority"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SOURCE_DIR="$SCRIPT_DIR/../../look-and-feel/$THEME_NAME"
+DEST_DIR="$HOME/.local/share/plasma/look-and-feel/$THEME_NAME"
 
-# Kill Plasma to prevent overwriting
-echo "🛑 Asking Plasma to shut down cleanly..."
-kquitapp6 plasmashell || true
+echo "🎨 Installing KDE Look-and-Feel: $THEME_NAME"
 
-echo "⏳ Waiting for Plasma to exit..."
-for i in {1..20}; do
-  pgrep -x plasmashell >/dev/null || break
-  sleep 0.5
-done
-
-if pgrep -x plasmashell >/dev/null; then
-  echo "❌ Plasma did not exit cleanly"
+# --------------------------------------------------
+# Sanity checks
+# --------------------------------------------------
+if [[ ! -d "$SOURCE_DIR" ]]; then
+  echo "❌ Source theme not found:"
+  echo "   $SOURCE_DIR"
   exit 1
 fi
 
 # --------------------------------------------------
-# Restore KDE config (relative to this script)
+# Install Look-and-Feel
 # --------------------------------------------------
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-RESTORE_SCRIPT="$SCRIPT_DIR/../../support/restore.sh"
+mkdir -p "$HOME/.local/share/plasma/look-and-feel"
+rm -rf "$DEST_DIR"
 
-if [[ -f "$RESTORE_SCRIPT" ]]; then
-  echo "📦 Restoring KDE configuration"
-  chmod +x "$RESTORE_SCRIPT"
-  "$RESTORE_SCRIPT"
-else
-  echo "⚠️  Restore script not found:"
-  echo "   $RESTORE_SCRIPT"
-fi
+cp -r "$SOURCE_DIR" "$DEST_DIR"
 
-echo "🧹 Clearing Plasma cache..."
-rm -rf ~/.cache/plasma*
-rm -rf ~/.cache/org.kde.plasmashell
-
-echo "🚀 Restarting Plasma..."
-plasmashell --replace >/dev/null 2>&1 &
-
-echo "✅ Plasma layout restored"
+echo "📦 Theme installed to:"
+echo "   $DEST_DIR"
 
 # --------------------------------------------------
-# Color Scheme: Catppuccin Mocha Red
+# Apply Look-and-Feel
 # --------------------------------------------------
-echo "🎨 Setting color scheme: Catppuccin Mocha Red"
-plasma-apply-colorscheme CatppuccinMochaRed
+echo "🚀 Applying Look-and-Feel: $THEME_NAME"
+lookandfeeltool --apply "$THEME_NAME"
 
-# --------------------------------------------------
-# Cursor Theme: macOS
-# --------------------------------------------------
-echo "🖱️  Setting cursor theme: macOS"
-plasma-apply-cursortheme macOS
-
-# --------------------------------------------------
-# Set wallpaper
-# --------------------------------------------------
-echo "🖼 Setting wallpaper"
-
-USER_HOME="${HOME}"
-WALLPAPER_DIR="${USER_HOME}/Pictures/Wallpapers"
-mkdir -p "${WALLPAPER_DIR}"
-
-WALLPAPER_PATH="${WALLPAPER_DIR}/catppuccin-rainbow.png"
-
-curl -L -o "${WALLPAPER_PATH}" \
-  https://github.com/zhichaoh/catppuccin-wallpapers/raw/main/misc/rainbow.png
-
-sudo dnf install -y qdbus
-
-qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
-var allDesktops = desktops();
-for (i=0; i<allDesktops.length; i++) {
-  d = allDesktops[i];
-  d.wallpaperPlugin = 'org.kde.image';
-  d.currentConfigGroup = ['Wallpaper', 'org.kde.image', 'General'];
-  d.writeConfig('Image', 'file://${WALLPAPER_PATH}');
-}
-"
-
-echo "✅ KDE appearance successfully applied"
+echo "✅ Look-and-Feel '$THEME_NAME' applied successfully"
